@@ -39,7 +39,7 @@ def view_ast_record(head_only=True, lineNum=100):
             print(line)
 
 
-def export_ast_record(head_only=False):
+def export_ast_record(head_only=False, lineNum=100):
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
@@ -63,7 +63,7 @@ def export_ast_record(head_only=False):
                     csv_writer.writerow(line)
                 # head_only parameter
                 if head_only:
-                    if iRow > 100:
+                    if iRow > lineNum - 1:
                         break
                     else:
                         iRow += 1
