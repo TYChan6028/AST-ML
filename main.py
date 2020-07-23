@@ -1,3 +1,3 @@
-import sustest_record_parser as srp
+import ast_functions as ast
 
-srp.export_ast_record()
+ast.export_ast_record()
