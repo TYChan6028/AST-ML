@@ -45,4 +45,4 @@ def countDistinct():
     return res
 
 
-print(countDistinct())
+# print(countDistinct())
