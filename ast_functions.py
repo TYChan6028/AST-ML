@@ -1,27 +1,21 @@
 import os
 import csv
 
-def export_ast_record():
+
+def export_ast_record(head_only=False):
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
     print("Target file is: ", file)
 
-    # open original antimicrobial susceptibility test record
+    # read original antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=';')
-        i = 0
+        iRow = 0
 
-        # for row in csv_reader:
-        #     if i > 1000:
-        #         break
-        #     else:
-        #         print(row['Lab ID'])
-        #         i += 1
-
-        # clean original test record and write parsed test record
+        # clean original test record and write to new test record
         os.chdir('/Users/ethanchan/AST-ML/')
-        with open('parsed_record.csv', 'w') as new_file:
+        with open('cleaned_record.csv', 'w') as new_file:
             fieldnames = ['Lab ID', 'Testing Date', 'Organism Name', 'Organism Code', 'Drug Code', 'Drug Name', 'Result']
             csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
             csv_writer.writeheader()
@@ -39,7 +33,9 @@ def export_ast_record():
                     year = year.split()[0]
                     line['Testing Date'] = f'{year}-{month}-{day}'
                     csv_writer.writerow(line)
-                # if i > 100:
-                #     break
-                # else:
-                #     i += 1
+
+                if head_only:
+                    if iRow > 100:
+                        break
+                    else:
+                        iRow += 1
