@@ -2,7 +2,7 @@ import os
 import csv
 
 # move to correct directory
-os.chdir('/Users/ethanchan/ms-ml/ms-data/REQ ID AST list/')
+os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
 file = '201710-201911generated_id_ast_export.csv'
 print("Target file is: ", file)
 
