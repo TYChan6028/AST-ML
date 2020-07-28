@@ -1,4 +1,23 @@
 import ast_functions as ast
+import ms_test as test
 
 # ast.view_ast_record(lineNum=10)
 # ast.export_ast_record()
+data = ast.load_ast_record(head_only=False, lineNum=50000)
+# print(data)
+print("length of raw data:", len(data))
+repeated_id = ast.find_repeated_id(data)
+rep_id_pos_dict = ast.get_repeated_id_pos(data, repeated_id)
+new_data = ast.filter_bad_entries(data, rep_id_pos_dict)
+print("length of modded data:", len(new_data))
+id_name_dict = ast.match_id_w_filename(new_data)
+print(len(id_name_dict))
+print(id_name_dict)
+# print("length of raw data:", len(data))
+# repeated_id = ast.find_repeated_id(new_data)
+# rep_id_pos_dict = ast.get_repeated_id_pos(data, repeated_id)
+# print(rep_id_pos_dict)
+# print("length of repeated_id:", repeated_id)
+# print(len(repeated_id))
+# print(data[1344])
+# print(data[1774])
