@@ -114,5 +114,16 @@ def count_distinct(dict_list):
         else:
             repeated_s.add(line['Lab ID'])
 
-    # print(len(repeated_s))
     return repeated_s
+
+
+def get_repeated_id_pos(dict_list, repeated_s):
+    repeated_pos_dict = {}
+    for lab_id in repeated_s:
+        rep_pos = []
+        for i, line in enumerate(dict_list):
+            if line['Lab ID'] == lab_id:
+                rep_pos.append(i)
+        repeated_pos_dict[lab_id] = rep_pos
+
+    return repeated_pos_dict
