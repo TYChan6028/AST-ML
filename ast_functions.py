@@ -118,12 +118,30 @@ def count_distinct(dict_list):
 
 
 def get_repeated_id_pos(dict_list, repeated_s):
-    repeated_pos_dict = {}
+    rep_id_pos_dict = {}
     for lab_id in repeated_s:
         rep_pos = []
         for i, line in enumerate(dict_list):
             if line['Lab ID'] == lab_id:
                 rep_pos.append(i)
-        repeated_pos_dict[lab_id] = rep_pos
+        rep_id_pos_dict[lab_id] = rep_pos
 
-    return repeated_pos_dict
+    return rep_id_pos_dict
+
+
+def filter_bad_entries(dict_list, rep_id_pos_dict):
+    # check S R result of repeated entries
+    remove_list = set()
+
+    for lab_id in rep_id_pos_dict:
+        result = set()
+        for pos in rep_id_pos_dict[lab_id]:
+            result.add(dict_list[pos]['Result'])
+            remove_list.add(pos)
+            # print("added", pos)
+
+        if len(result) == 1:
+            # keep last entry
+            remove_list.remove(rep_id_pos_dict[lab_id][-1])
+
+    return remove_list
