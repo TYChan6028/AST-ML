@@ -4,7 +4,8 @@ import csv
 import ast_functions as ast
 
 # exp = MSExperiment()
-# MzMLFile().load("18-01-01_Labo1_0AAADLZ_1_0101DS172207384_L4_1117_1.mzML", exp)
+# filename = '18-01-01_Labo1_0AAADLZ_1_0101DS172207384_L4_1117_1.mzML'
+# MzMLFile().load(filename, exp)
 
 # spec = exp[0]
 # mz, intensity = spec.get_peaks()
@@ -30,7 +31,7 @@ def get_filename_dict(distinct_s):
     for file in filenames:
         lab_id = file.split('_')[2]
         if lab_id in distinct_s:
-            id_name_dict[lab_id] = file
+            id_name_dict[lab_id] = [file]
 
     os.chdir('/Users/ethanchan/AST-ML/ms-data/MS raw_2019/')
     filenames = os.listdir()
@@ -38,7 +39,7 @@ def get_filename_dict(distinct_s):
     for file in filenames:
         lab_id = file.split('_')[2]
         if lab_id in distinct_s:
-            id_name_dict[lab_id] = file
+            id_name_dict[lab_id] = [file]
 
     return id_name_dict
 
@@ -74,28 +75,28 @@ def get_repeated_id_pos(data, rep_data):
     return new_dict
 
 
-data = ast.load_ast_record(head_only=False, lineNum=10000)
-rep_data = count_distinct(data)
+# data = ast.load_ast_record(head_only=False, lineNum=10000)
+# dis_data = count_distinct(data)
 # print(rep_data)
 # print(get_repeated_id_pos(data, rep_data))
 # print(len(new_dict))
 # print(data[5359], data[5387])  # very strange case
 # print(data[3202], data[3229])
-id_name_dict = get_filename_dict(rep_data)
-print(id_name_dict)
-print(len(id_name_dict))
+# id_name_dict = get_filename_dict(dis_data)
+# print(id_name_dict)
+# print(len(id_name_dict))
 
-final_id = set()
-for lab_id in id_name_dict:
-    final_id.add(lab_id)
+# final_id = set()
+# for lab_id in id_name_dict:
+#     final_id.add(lab_id)
 
-R = 0
-S = 0
-for line in data:
-    if line['Lab ID'] in final_id:
-        if line['Result'] == 'S':
-            S += 1
-        else:
-            R += 1
-print("Num of S = ", S)
-print("Num of R = ", R)
+# R = 0
+# S = 0
+# for line in data:
+#     if line['Lab ID'] in final_id:
+#         if line['Result'] == 'S':
+#             S += 1
+#         else:
+#             R += 1
+# print("Num of S = ", S)
+# print("Num of R = ", R)
