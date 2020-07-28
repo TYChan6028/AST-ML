@@ -15,6 +15,7 @@ def line_formatter(line):
     day = day.zfill(2)
     year = year.split()[0]
     line['Testing Date'] = f'{year}-{month}-{day}'
+
     return line
 
 
@@ -35,8 +36,9 @@ def view_ast_record(head_only=True, lineNum=100):
                 else:
                     iRow += 1
             ###
-            line = line_formatter(line)  # clean and reformat output
-            print(line)
+            if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
+                line = line_formatter(line)  # clean and reformat output
+                print(line)
 
 
 def load_ast_record(head_only=True, lineNum=100):
@@ -59,8 +61,9 @@ def load_ast_record(head_only=True, lineNum=100):
                 else:
                     iRow += 1
             ###
-            line = line_formatter(line)  # clean and reformat output
-            content.append(line)
+            if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
+                line = line_formatter(line)  # clean and reformat output
+                content.append(line)
 
     return content
 
