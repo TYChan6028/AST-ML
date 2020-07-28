@@ -1,6 +1,7 @@
-from pyopenms import *
+# from pyopenms import *
 import os
 import csv
+import ast_functions as ast
 
 # exp = MSExperiment()
 # MzMLFile().load("18-01-01_Labo1_0AAADLZ_1_0101DS172207384_L4_1117_1.mzML", exp)
@@ -15,34 +16,86 @@ import csv
 # print(len(intensity))
 
 # os.chdir('/Users/ethanchan/AST-ML/ms-data/MS raw_2018/')
-# file = '201710-201911generated_id_ast_export.csv'
 # filenames = os.listdir()
 # filenames.sort()
-# print(filenames)
-# print("Target file is: ", file)
+# print(filenames[999].split('_'))
+# print(len(filenames))
 
 
-def countDistinct():
+def get_filename_dict(distinct_s):
+    os.chdir('/Users/ethanchan/AST-ML/ms-data/MS raw_2018/')
+    filenames = os.listdir()
+    filenames.sort()
+    id_name_dict = {}
+    for file in filenames:
+        lab_id = file.split('_')[2]
+        if lab_id in distinct_s:
+            id_name_dict[lab_id] = file
+
+    os.chdir('/Users/ethanchan/AST-ML/ms-data/MS raw_2019/')
+    filenames = os.listdir()
+    filenames.sort()
+    for file in filenames:
+        lab_id = file.split('_')[2]
+        if lab_id in distinct_s:
+            id_name_dict[lab_id] = file
+
+    return id_name_dict
+
+
+def count_distinct(dict_list):
     # Creates an empty hashset
-    s = set()
+    distinct_s = set()
+    repeated_s = set()
     # Traverse the input array
-    res = 0
+    ct = 0
 
-    os.chdir('/Users/ethanchan/AST-ML/')
-    file = 'cleaned_record.csv'
-    # os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
-    # file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is: ", file)
-    with open(file, 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=',')
+    for line in dict_list:
+        # If not present, then put it in hashtable and increment result
+        if (line['Lab ID'] not in distinct_s):
+            distinct_s.add(line['Lab ID'])
+            ct += 1
+        else:
+            repeated_s.add(line['Lab ID'])
 
-        for line in csv_reader:
-            # If not present, then put it in
-            # hashtable and increment result
-            if (line['Lab ID'] not in s):
-                s.add(line['Lab ID'])
-                res += 1
-    return res
+    # print(len(repeated_s))
+    return distinct_s
 
 
-# print(countDistinct())
+def get_repeated_id_pos(data, rep_data):
+    new_dict = {}
+    for lab_id in rep_data:
+        rep_pos = []
+        for i, line in enumerate(data):
+            if line['Lab ID'] == lab_id:
+                rep_pos.append(i)
+        new_dict[lab_id] = rep_pos
+
+    return new_dict
+
+
+data = ast.load_ast_record(head_only=False, lineNum=10000)
+rep_data = count_distinct(data)
+# print(rep_data)
+# print(get_repeated_id_pos(data, rep_data))
+# print(len(new_dict))
+# print(data[5359], data[5387])  # very strange case
+# print(data[3202], data[3229])
+id_name_dict = get_filename_dict(rep_data)
+print(id_name_dict)
+print(len(id_name_dict))
+
+final_id = set()
+for lab_id in id_name_dict:
+    final_id.add(lab_id)
+
+R = 0
+S = 0
+for line in data:
+    if line['Lab ID'] in final_id:
+        if line['Result'] == 'S':
+            S += 1
+        else:
+            R += 1
+print("Num of S = ", S)
+print("Num of R = ", R)
