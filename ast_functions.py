@@ -22,7 +22,7 @@ def line_formatter(line):
 def view_ast_record(head_only=True, lineNum=100):
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is: ", file)
+    print("Target file is:", file)
 
     with open(file, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=';')
@@ -45,7 +45,7 @@ def load_ast_record(head_only=True, lineNum=100):
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is: ", file)
+    print("Target file is:", file)
 
     # read antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
@@ -72,7 +72,7 @@ def export_ast_record(head_only=False, lineNum=100):
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is: ", file)
+    print("Target file is:", file)
 
     # read original antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
@@ -99,7 +99,7 @@ def export_ast_record(head_only=False, lineNum=100):
                     csv_writer.writerow(line)
 
 
-def count_distinct(dict_list):
+def find_repeated_id(dict_list):
     # Creates an empty hashset
     distinct_s = set()
     repeated_s = set()
@@ -139,9 +139,49 @@ def filter_bad_entries(dict_list, rep_id_pos_dict):
             result.add(dict_list[pos]['Result'])
             remove_list.add(pos)
             # print("added", pos)
+        # print(remove_list)
 
-        if len(result) == 1:
-            # keep last entry
-            remove_list.remove(rep_id_pos_dict[lab_id][-1])
+        # if len(result) == 1:  # results are all S or all R
+        #     # keep last entry
+        #     remove_list.remove(rep_id_pos_dict[lab_id][-1])
+        #     print("removed", rep_id_pos_dict[lab_id][-1])
+        #     print(remove_list)
+        # else:  # results contain S and R
+        #     print("conflicted results")
 
-    return remove_list
+    for i, line in reversed(list(enumerate(dict_list))):
+        if i in remove_list:
+            dict_list.pop(i)
+
+    return dict_list
+
+
+# def filter_repeated_ms_profile()
+
+
+def match_id_w_filename(dict_list):
+    valid_id = set()
+    for line in dict_list:
+        valid_id.add(line['Lab ID'])
+
+    dir_list = [
+        '/Users/ethanchan/AST-ML/ms-data/MS raw_2018/',
+        '/Users/ethanchan/AST-ML/ms-data/MS raw_2019/'
+    ]
+
+    id_name_dict = {}
+    for path in dir_list:
+        os.chdir(path)
+        filenames = os.listdir()
+        filenames.sort()
+        for file in filenames:
+            lab_id = file.split('_')[2]
+            if lab_id in valid_id:
+                if lab_id not in id_name_dict:
+                    id_name_dict[lab_id] = file
+                else:
+                    del id_name_dict[lab_id]
+                    valid_id.remove(lab_id)
+                    # print(f'{lab_id} has more than one mzML file')
+
+    return id_name_dict
