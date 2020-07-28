@@ -50,7 +50,7 @@ def load_ast_record(head_only=True, lineNum=100):
     # read antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file, delimiter=';')
-        content = []
+        dict_list = []
         iRow = 0
 
         for line in csv_reader:
@@ -63,9 +63,9 @@ def load_ast_record(head_only=True, lineNum=100):
             ###
             if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
                 line = line_formatter(line)  # clean and reformat output
-                content.append(line)
+                dict_list.append(line)
 
-    return content
+    return dict_list
 
 
 def export_ast_record(head_only=False, lineNum=100):
@@ -97,3 +97,22 @@ def export_ast_record(head_only=False, lineNum=100):
                 if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
                     line = line_formatter(line)  # clean and reformat output
                     csv_writer.writerow(line)
+
+
+def count_distinct(dict_list):
+    # Creates an empty hashset
+    distinct_s = set()
+    repeated_s = set()
+    # Traverse the input array
+    ct = 0
+
+    for line in dict_list:
+        # If not present, then put it in hashtable and increment result
+        if (line['Lab ID'] not in distinct_s):
+            distinct_s.add(line['Lab ID'])
+            ct += 1
+        else:
+            repeated_s.add(line['Lab ID'])
+
+    # print(len(repeated_s))
+    return repeated_s
