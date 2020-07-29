@@ -19,7 +19,7 @@ def line_formatter(line):
     return line
 
 
-def view_ast_record(head_only=True, lineNum=100):
+def view_ast_record(dict_list, head_only=True, lineNum=100):
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
     print("Target file is:", file)
@@ -45,7 +45,7 @@ def load_ast_record(head_only=True, lineNum=100):
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
     file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is:", file)
+    print("Loading target file:", file)
 
     # read antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
@@ -68,13 +68,31 @@ def load_ast_record(head_only=True, lineNum=100):
     return dict_list
 
 
+def load_cleaned_record():
+    # move to correct directory
+    os.chdir('/Users/ethanchan/AST-ML/')
+    file = 'cleaned_record.csv'
+    print("Loading target file:", file)
+
+    # read antimicrobial susceptibility test record
+    with open(file, 'r') as csv_file:
+        csv_reader = csv.DictReader(csv_file, delimiter=',')
+        dict_list = []
+
+        for line in csv_reader:
+            dict_list.append(line)
+
+    # print(f'Successfully loaded AST record from {file}!')
+    return dict_list
+
+
 def export_ast_record(dict_list, head_only=False, lineNum=100):
     fieldnames = []
     for key in dict_list[0]:
         fieldnames.append(key)
 
     os.chdir('/Users/ethanchan/AST-ML/')
-    with open('final_record.csv', 'w') as new_file:
+    with open('cleaned_record.csv', 'w') as new_file:
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writeheader()
 
@@ -84,6 +102,8 @@ def export_ast_record(dict_list, head_only=False, lineNum=100):
         else:
             for line in dict_list:
                 csv_writer.writerow(line)
+
+    print("Successfully exported AST record to cleaned_record.csv!")
 
 
 def find_repeated_id(dict_list):
