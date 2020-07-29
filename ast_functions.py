@@ -186,3 +186,17 @@ def match_id_w_filename(dict_list):
             dict_list.pop(i)
 
     return id_name_dict, dict_list
+
+
+def get_s_r_ratio(dict_list):
+    S = 0
+    R = 0
+    for line in dict_list:
+        if line['Result'] == 'S':
+            S += 1
+        else:
+            R += 1
+    # print("Num of S = ", S)
+    # print("Num of R = ", R)
+
+    return S, R, round(S / len(dict_list), 2) * 100, round(R / len(dict_list), 2) * 100
