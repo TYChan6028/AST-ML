@@ -156,9 +156,6 @@ def filter_bad_entries(dict_list, rep_id_pos_dict):
     return dict_list
 
 
-# def filter_repeated_ms_profile()
-
-
 def match_id_w_filename(dict_list):
     valid_id = set()
     for line in dict_list:
@@ -184,4 +181,8 @@ def match_id_w_filename(dict_list):
                     valid_id.remove(lab_id)
                     # print(f'{lab_id} has more than one mzML file')
 
-    return id_name_dict
+    for i, line in reversed(list(enumerate(dict_list))):
+        if line['Lab ID'] not in id_name_dict:
+            dict_list.pop(i)
+
+    return id_name_dict, dict_list
