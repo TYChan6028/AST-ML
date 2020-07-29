@@ -195,6 +195,23 @@ def match_id_w_filename(dict_list):
     return id_name_dict, dict_list
 
 
+def load_ms_data(lab_id, id_name_dict):
+    from pyopenms import MSExperiment, MzMLFile
+    tail = id_name_dict[lab_id].split('-')[0]
+    filename = f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/' + id_name_dict[lab_id]
+    exp = MSExperiment()
+    MzMLFile().load(filename, exp)
+
+    spec = exp[0]
+    mz, intensity = spec.get_peaks()
+
+    print(mz)
+    print(len(mz))
+    print()
+    print(intensity)
+    print(len(intensity))
+
+
 def get_s_r_ratio(dict_list):
     S = 0
     R = 0
