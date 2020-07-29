@@ -68,35 +68,22 @@ def load_ast_record(head_only=True, lineNum=100):
     return dict_list
 
 
-def export_ast_record(head_only=False, lineNum=100):
-    # move to correct directory
-    os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
-    file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is:", file)
+def export_ast_record(dict_list, head_only=False, lineNum=100):
+    fieldnames = []
+    for key in dict_list[0]:
+        fieldnames.append(key)
 
-    # read original antimicrobial susceptibility test record
-    with open(file, 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=';')
-        iRow = 0
+    os.chdir('/Users/ethanchan/AST-ML/')
+    with open('final_record.csv', 'w') as new_file:
+        csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
+        csv_writer.writeheader()
 
-        # clean original test record and write to new test record
-        os.chdir('/Users/ethanchan/AST-ML/')
-        with open('cleaned_record.csv', 'w') as new_file:
-            fieldnames = ['Lab ID', 'Testing Date', 'Organism Name', 'Organism Code', 'Drug Code', 'Drug Name', 'Result']
-            csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
-            csv_writer.writeheader()
-
-            for line in csv_reader:
-                # head_only parameter
-                if head_only:
-                    if iRow > lineNum - 1:
-                        break
-                    else:
-                        iRow += 1
-                ###
-                if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
-                    line = line_formatter(line)  # clean and reformat output
-                    csv_writer.writerow(line)
+        if head_only:
+            for i in range(lineNum):
+                csv_writer.writerow(dict_list[i])
+        else:
+            for line in dict_list:
+                csv_writer.writerow(line)
 
 
 def find_repeated_id(dict_list):
