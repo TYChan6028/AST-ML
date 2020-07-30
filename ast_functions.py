@@ -197,6 +197,15 @@ def match_id_w_filename(dict_list):
     return id_fname_dict, dict_list
 
 
+def export_id_fname_dict(id_fname_dict):
+    import json
+    os.chdir('/Users/ethanchan/AST-ML/')
+    with open('id_fname_dict.json', 'w') as f:
+        json.dump(id_fname_dict, f, indent=2)
+
+    print("Successfully exported LabID-filename dict to id_fname_dict.json!")
+
+
 def load_ms_data(lab_id, id_fname_dict):
     from pyopenms import MSExperiment, MzMLFile
     tail = id_fname_dict[lab_id].split('-')[0]
