@@ -173,32 +173,34 @@ def match_id_w_filename(dict_list):
         '/Users/ethanchan/AST-ML/ms-data/MS raw_2019/'
     ]
 
-    id_name_dict = {}
+    id_fname_dict = {}
     for path in dir_list:
         os.chdir(path)
         filenames = os.listdir()
         filenames.sort()
+        if '.DS_Store' in filenames:
+            filenames.pop(0)
         for file in filenames:
             lab_id = file.split('_')[2]
             if lab_id in valid_id:
-                if lab_id not in id_name_dict:
-                    id_name_dict[lab_id] = file
+                if lab_id not in id_fname_dict:
+                    id_fname_dict[lab_id] = file
                 else:
-                    del id_name_dict[lab_id]
+                    del id_fname_dict[lab_id]
                     valid_id.remove(lab_id)
                     # print(f'{lab_id} has more than one mzML file')
 
     for i, line in reversed(list(enumerate(dict_list))):
-        if line['Lab ID'] not in id_name_dict:
+        if line['Lab ID'] not in id_fname_dict:
             dict_list.pop(i)
 
-    return id_name_dict, dict_list
+    return id_fname_dict, dict_list
 
 
-def load_ms_data(lab_id, id_name_dict):
+def load_ms_data(lab_id, id_fname_dict):
     from pyopenms import MSExperiment, MzMLFile
-    tail = id_name_dict[lab_id].split('-')[0]
-    filename = f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/' + id_name_dict[lab_id]
+    tail = id_fname_dict[lab_id].split('-')[0]
+    filename = f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/' + id_fname_dict[lab_id]
     exp = MSExperiment()
     MzMLFile().load(filename, exp)
 
