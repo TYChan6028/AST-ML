@@ -20,3 +20,5 @@ print(f'S = {s} ({s_per}%)')
 print(f'R = {r} ({r_per}%)')
 # export the cleaned ast record to a new csv file
 ast.export_ast_record(final_data, head_only=False)
+# export the labID-filename dict to a new json file
+ast.export_id_fname_dict(id_fname_dict)
