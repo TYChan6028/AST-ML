@@ -1,5 +1,6 @@
 import os
 import csv
+import json
 
 
 def line_formatter(line):
@@ -198,7 +199,6 @@ def match_id_w_filename(dict_list):
 
 
 def export_id_fname_dict(id_fname_dict):
-    import json
     os.chdir('/Users/ethanchan/AST-ML/')
     with open('id_fname_dict.json', 'w') as f:
         json.dump(id_fname_dict, f, indent=2)
@@ -206,10 +206,15 @@ def export_id_fname_dict(id_fname_dict):
     print("Successfully exported LabID-filename dict to id_fname_dict.json!")
 
 
-def load_ms_data(lab_id, id_fname_dict):
+def load_ms_data(lab_id):
+    os.chdir('/Users/ethanchan/AST-ML/')
+    with open('id_fname_dict.json') as f:
+        id_fname_dict = json.load(f)
+
     from pyopenms import MSExperiment, MzMLFile
     tail = id_fname_dict[lab_id].split('-')[0]
-    filename = f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/' + id_fname_dict[lab_id]
+    os.chdir(f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/')
+    filename = id_fname_dict[lab_id]
     exp = MSExperiment()
     MzMLFile().load(filename, exp)
 
