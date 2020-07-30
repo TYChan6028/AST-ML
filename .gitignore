@@ -134,3 +134,4 @@ ms-data/
 *.txt
 *.csv
 *.mzml
+*.json
