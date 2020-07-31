@@ -206,11 +206,15 @@ def export_id_fname_dict(id_fname_dict):
     print("Successfully exported LabID-filename dict to id_fname_dict.json!")
 
 
-def load_ms_data(lab_id):
+def import_id_fname_dict():
     os.chdir('/Users/ethanchan/AST-ML/')
     with open('id_fname_dict.json') as f:
         id_fname_dict = json.load(f)
 
+    return id_fname_dict
+
+
+def load_ms_data(lab_id, id_fname_dict):
     from pyopenms import MSExperiment, MzMLFile
     tail = id_fname_dict[lab_id].split('-')[0]
     os.chdir(f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/')
@@ -221,11 +225,16 @@ def load_ms_data(lab_id):
     spec = exp[0]
     mz, intensity = spec.get_peaks()
 
-    print(mz)
-    print(len(mz))
-    print()
-    print(intensity)
-    print(len(intensity))
+    return mz, intensity
+
+
+def export_ms_data(mz, intensity):
+    from numpy import savetxt, vstack
+    os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
+    # np.concatenate((mz, intensity), axis=1)
+    # np.hstack((mz, intensity))
+    savetxt("foo.csv", vstack((mz, intensity)).T, delimiter=",", fmt='%10.2f')
+    print('export ms data done')
 
 
 def get_s_r_ratio(dict_list):
