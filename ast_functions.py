@@ -237,6 +237,25 @@ def export_ms_data(mz, intensity):
     print('export ms data done')
 
 
+def import_ms_data(lab_id, id_fname_dict):
+    from numpy import genfromtxt, shape
+    os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
+    # with open(id_fname_dict[lab_id], 'r') as csv_file:
+    # with open('foo.csv', 'r') as csv_file:
+    #     csv_reader = csv.reader(csv_file, delimiter=',')
+
+    #     for line in csv_reader:
+    #         print(type(line))
+    #         print(line)
+    ms_data = genfromtxt('foo.csv', delimiter=',')
+    # print(type(ms_data))
+    # print(shape(ms_data))
+    # print(ms_data)
+    print('import ms data done')
+
+    return ms_data
+
+
 def get_s_r_ratio(dict_list):
     S = 0
     R = 0
