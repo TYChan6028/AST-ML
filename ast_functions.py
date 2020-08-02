@@ -214,48 +214,6 @@ def import_id_fname_dict():
     return id_fname_dict
 
 
-def load_ms_data(lab_id, id_fname_dict):
-    from pyopenms import MSExperiment, MzMLFile
-    tail = id_fname_dict[lab_id].split('-')[0]
-    os.chdir(f'/Users/ethanchan/AST-ML/ms-data/MS raw_20{tail}/')
-    filename = id_fname_dict[lab_id]
-    exp = MSExperiment()
-    MzMLFile().load(filename, exp)
-
-    spec = exp[0]
-    mz, intensity = spec.get_peaks()
-
-    return mz, intensity
-
-
-def export_ms_data(mz, intensity):
-    from numpy import savetxt, vstack
-    os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
-    # np.concatenate((mz, intensity), axis=1)
-    # np.hstack((mz, intensity))
-    savetxt("foo.csv", vstack((mz, intensity)).T, delimiter=",", fmt='%10.2f')
-    print('export ms data done')
-
-
-def import_ms_data(lab_id, id_fname_dict):
-    from numpy import genfromtxt, shape
-    os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
-    # with open(id_fname_dict[lab_id], 'r') as csv_file:
-    # with open('foo.csv', 'r') as csv_file:
-    #     csv_reader = csv.reader(csv_file, delimiter=',')
-
-    #     for line in csv_reader:
-    #         print(type(line))
-    #         print(line)
-    ms_data = genfromtxt('foo.csv', delimiter=',')
-    # print(type(ms_data))
-    # print(shape(ms_data))
-    # print(ms_data)
-    print('import ms data done')
-
-    return ms_data
-
-
 def get_s_r_ratio(dict_list):
     S = 0
     R = 0
