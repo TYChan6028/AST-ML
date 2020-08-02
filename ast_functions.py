@@ -73,7 +73,7 @@ def load_cleaned_record():
     # move to correct directory
     os.chdir('/Users/ethanchan/AST-ML/')
     file = 'cleaned_record.csv'
-    print("Loading target file:", file)
+    # print("Loading target file:", file)
 
     # read antimicrobial susceptibility test record
     with open(file, 'r') as csv_file:
@@ -226,3 +226,17 @@ def get_s_r_ratio(dict_list):
     # print("Num of R = ", R)
 
     return S, R, round(S / len(dict_list), 2) * 100, round(R / len(dict_list), 2) * 100
+
+
+def get_s_r_id():
+    dict_list = load_cleaned_record()
+    s_id = set()
+    r_id = set()
+
+    for line in dict_list:
+        if line['Result'] == 'S':
+            s_id.add(line['Lab ID'])
+        else:
+            r_id.add(line['Lab ID'])
+
+    return s_id, r_id
