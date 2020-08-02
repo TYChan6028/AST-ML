@@ -31,16 +31,32 @@ def export_all_ms_data(id_fname_dict):
         export_ms_data(lab_id, mz, intensity)
         # print(i)
         # i += 1
-    print("Successfully emported all ms data!")
+    print("Successfully exported all ms data!")
 
 
-def import_ms_data(lab_id, id_fname_dict):
-    from numpy import genfromtxt, shape
+def import_ms_data(lab_id):
+    from numpy import genfromtxt
     os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
-    ms_data = genfromtxt(f'{lab_id}.csv', delimiter=',')
-    print(type(ms_data))
-    print(shape(ms_data))
-    print(ms_data)
-    print('import ms data done')
+    ms_data = genfromtxt(f'{lab_id}.csv', delimiter=',', dtype=int)
+    # print(type(ms_data))
+    # print(shape(ms_data))
+    # print(ms_data)
+    # print(f'Successfully imported ms data from {lab_id}.csv!')
 
     return ms_data
+
+
+def get_sparsed_peak(lab_id, mz_min=2000, mz_max=20000):
+    from numpy import zeros, array
+    # from numpy import set_printoptions, inf
+    # set_printoptions(threshold=inf)
+    peaks = import_ms_data(lab_id)
+    mz = set(peaks[:, 0])
+    intensity = dict(zip(peaks[:, 0], peaks[:, 1]))
+    new_mz = zeros((mz_max - mz_min, 2), dtype=int)
+
+    for i in range(mz_max - mz_min):
+        if i + mz_min in mz:
+            new_mz[i, :] = array([i + mz_min, intensity[i + mz_min]])
+
+    return new_mz
