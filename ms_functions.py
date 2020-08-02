@@ -24,6 +24,16 @@ def export_ms_data(lab_id, mz, intensity):
     # print('export ms data done')
 
 
+def export_all_ms_data(id_fname_dict):
+    # i = 1
+    for lab_id in id_fname_dict:
+        mz, intensity = load_ms_data(lab_id, id_fname_dict)
+        export_ms_data(lab_id, mz, intensity)
+        # print(i)
+        # i += 1
+    print("Successfully emported all ms data!")
+
+
 def import_ms_data(lab_id, id_fname_dict):
     from numpy import genfromtxt, shape
     os.chdir('/Users/ethanchan/AST-ML/cleaned_ms_data/')
