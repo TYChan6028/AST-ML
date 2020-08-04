@@ -46,7 +46,7 @@ def import_ms_data(lab_id):
     return ms_data
 
 
-def get_sparsed_peak(lab_id, bin=100, mz_min=2000, mz_max=20000):
+def get_sparsed_peak(lab_id, bin=1, mz_min=2000, mz_max=20000):
     from numpy import zeros, array
     # from numpy import set_printoptions, inf
     # set_printoptions(threshold=inf)
@@ -59,7 +59,8 @@ def get_sparsed_peak(lab_id, bin=100, mz_min=2000, mz_max=20000):
         if i + mz_min in mz:
             new_mz[i, :] = array([i + mz_min, intensity[i + mz_min]])
 
-    new_mz = bin_sparsed_peaks(new_mz, bin=bin)
+    if bin != 1:
+        new_mz = bin_sparsed_peaks(new_mz, bin=bin)
 
     return new_mz
 
