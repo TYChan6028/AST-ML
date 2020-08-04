@@ -46,17 +46,38 @@ def import_ms_data(lab_id):
     return ms_data
 
 
-def get_sparsed_peak(lab_id, mz_min=2000, mz_max=20000):
+def get_sparsed_peak(lab_id, bin=100, mz_min=2000, mz_max=20000):
     from numpy import zeros, array
     # from numpy import set_printoptions, inf
     # set_printoptions(threshold=inf)
     peaks = import_ms_data(lab_id)
     mz = set(peaks[:, 0])
     intensity = dict(zip(peaks[:, 0], peaks[:, 1]))
-    new_mz = zeros((mz_max - mz_min, 2), dtype=int)
+    new_mz = zeros((mz_max - mz_min + 1, 2), dtype=int)
 
-    for i in range(mz_max - mz_min):
+    for i in range(mz_max - mz_min + 1):
         if i + mz_min in mz:
             new_mz[i, :] = array([i + mz_min, intensity[i + mz_min]])
 
+    new_mz = bin_sparsed_peaks(new_mz, bin=bin)
+
     return new_mz
+
+
+def bin_sparsed_peaks(new_mz, bin=100, mz_min=2000):
+    from numpy import zeros, array
+    new_len = (len(new_mz) - 1) // bin
+    binned_new_mz = zeros((new_len, 2), dtype=int)
+
+    for i in range(new_len):
+        binned_new_mz[i, :] = array([mz_min + i * bin, sum(new_mz[i * bin:i * bin + bin, 1])])
+
+    return binned_new_mz
+
+
+# mz = get_sparsed_peak('K23D2A2')
+# binned_new_mz = bin_sparsed_peaks(mz, bin=50)
+# print(get_sparsed_peak('K23D2A2')[50:100, 1])
+# print()
+# print(len(binned_new_mz))
+# print(binned_new_mz)
