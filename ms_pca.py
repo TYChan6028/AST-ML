@@ -24,7 +24,7 @@ def create_peaks_df(bin, s_id, r_id, peaks, sen, res):
         # if i > 5:
         #     break
     os.chdir('/Users/ethanchan/AST-ML/')
-    df.to_csv(f'pd_dframe_bin={bin}.csv')
+    df.to_csv(f'pd_df_bin={bin}.csv')
     # after the csv file is created, remember to go into the file and maually delete the first comma
 
 
@@ -43,7 +43,7 @@ res = ['R-' + str(i) for i in range(1, len(r_id) + 1)]
 
 # read pre-created dataframe from file
 os.chdir('/Users/ethanchan/AST-ML/')
-df = pd.read_csv(f'pd_dframe_bin={bin}.csv')
+df = pd.read_csv(f'pd_df_bin={bin}.csv')
 # print(df.head(10))
 # print(df.loc[:, 'S-1'])
 # print(df.loc['pk-2000~2100', :])
