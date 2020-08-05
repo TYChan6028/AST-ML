@@ -71,7 +71,7 @@ def load_ast_record(head_only=True, lineNum=100):
 
 def load_cleaned_record():
     # move to correct directory
-    os.chdir('/Users/ethanchan/AST-ML/')
+    os.chdir('/Users/ethanchan/AST-ML/exported_data/')
     file = 'cleaned_record.csv'
     # print("Loading target file:", file)
 
@@ -92,7 +92,7 @@ def export_ast_record(dict_list, head_only=False, lineNum=100):
     for key in dict_list[0]:
         fieldnames.append(key)
 
-    os.chdir('/Users/ethanchan/AST-ML/')
+    os.chdir('/Users/ethanchan/AST-ML/exported_data/')
     with open('cleaned_record.csv', 'w') as new_file:
         csv_writer = csv.DictWriter(new_file, fieldnames=fieldnames, delimiter=',')
         csv_writer.writeheader()
@@ -199,7 +199,7 @@ def match_id_w_filename(dict_list):
 
 
 def export_id_fname_dict(id_fname_dict):
-    os.chdir('/Users/ethanchan/AST-ML/')
+    os.chdir('/Users/ethanchan/AST-ML/exported_data/')
     with open('id_fname_dict.json', 'w') as f:
         json.dump(id_fname_dict, f, indent=2)
 
@@ -207,7 +207,7 @@ def export_id_fname_dict(id_fname_dict):
 
 
 def import_id_fname_dict():
-    os.chdir('/Users/ethanchan/AST-ML/')
+    os.chdir('/Users/ethanchan/AST-ML/exported_data/')
     with open('id_fname_dict.json') as f:
         id_fname_dict = json.load(f)
 

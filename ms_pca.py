@@ -23,7 +23,7 @@ def create_peaks_df(bin, s_id, r_id, peaks, sen, res):
         df.loc[:, f'R-{i}'] = ms.get_sparsed_peak(lab_id, bin)[:, 1]
         # if i > 5:
         #     break
-    os.chdir('/Users/ethanchan/AST-ML/')
+    os.chdir('/Users/ethanchan/AST-ML/exported_data/')
     df.to_csv(f'pd_df_bin={bin}.csv')
     # after the csv file is created, remember to go into the file and maually delete the first comma
 
@@ -42,7 +42,7 @@ res = ['R-' + str(i) for i in range(1, len(r_id) + 1)]
 # pdb.set_trace()
 
 # read pre-created dataframe from file
-os.chdir('/Users/ethanchan/AST-ML/')
+os.chdir('/Users/ethanchan/AST-ML/exported_data/')
 df = pd.read_csv(f'pd_df_bin={bin}.csv')
 # print(df.head(10))
 # print(df.loc[:, 'S-1'])
