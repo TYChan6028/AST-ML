@@ -74,11 +74,3 @@ def bin_sparsed_peaks(new_mz, bin=100, mz_min=2000):
         binned_new_mz[i, :] = array([mz_min + i * bin, sum(new_mz[i * bin:i * bin + bin, 1])])
 
     return binned_new_mz
-
-
-# mz = get_sparsed_peak('K23D2A2')
-# binned_new_mz = bin_sparsed_peaks(mz, bin=50)
-# print(get_sparsed_peak('K23D2A2')[50:100, 1])
-# print()
-# print(len(binned_new_mz))
-# print(binned_new_mz)
