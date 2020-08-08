@@ -45,8 +45,9 @@ res = ['R-' + str(i) for i in range(1, len(r_id) + 1)]
 os.chdir('/Users/ethanchan/AST-ML/exported_data/')
 df = pd.read_csv(f'pd_df_bin={bin}.csv')
 # print(df.head(10))
-# print(df.loc[:, 'S-1'])
+# print(df.loc['pk-2310~2320', 'S-1'])
 # print(df.loc['pk-2000~2100', :])
+# pdb.set_trace()
 
 # scale and center data
 scaled_df = preprocessing.StandardScaler().fit_transform(df.T)
