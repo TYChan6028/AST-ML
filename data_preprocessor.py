@@ -18,6 +18,9 @@ print("length of final_data:", len(final_data))
 s, r, s_per, r_per = ast.get_s_r_ratio(final_data)
 print(f'S = {s} ({s_per}%)')
 print(f'R = {r} ({r_per}%)')
+
+### DANGER! the code below will overwrite existing exported files!!! ###
+
 # export the cleaned ast record to a new csv file
 ast.export_ast_record(final_data, head_only=False)
 # export the labID-filename dict to a new json file
