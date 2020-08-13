@@ -15,7 +15,7 @@ def naive_classifier(sorted_peak, s_ct, r_ct):
     # best_spec = 0
     # best_acc = 0
     # alpha_idx = 0
-    best = {'sensitivity': 0, 'specificity': 0, 'accuracy': 0, 'alpha': 0, 'orientation': 0}
+    best = {'sensitivity': 0, 'specificity': 0, 'accuracy': 0, 'alpha': 0, 'orientation': 0, 'confidence': 0}
     for sep_idx in range(1, sample_ct):
         # cand_list = []
         local_best = {'sensitivity': [0, 0], 'specificity': [0, 0], 'accuracy': [0, 0]}
@@ -63,6 +63,7 @@ def naive_classifier(sorted_peak, s_ct, r_ct):
             best['accuracy'] = local_best['accuracy'][o]
             best['alpha'] = (sorted_peak['intensity'][sep_idx] - sorted_peak['intensity'][sep_idx - 1]) / 2
             best['orientation'] = o
+            best['confidence'] = round(sample_ct / 2477 * 100)
 
         # print(sep_idx)
         # print(sensitivity, specificity, accuracy)
@@ -87,11 +88,10 @@ r_ct = len(r_id)
 all_ct = len(s_id) + len(r_id)
 dtype = [('intensity', int), ('result', int)]
 peaks = ['pk-' + f'{2000+i}' for i in range(0, 18001)]
-result_df = pd.DataFrame(columns=['accuracy', 'sensitivity', 'specificity', 'alpha', 'orientation'], index=peaks)
+result_df = pd.DataFrame(columns=['accuracy', 'sensitivity', 'specificity', 'alpha', 'orientation', 'confidence'], index=peaks)
 
 # for each mz, convert pandas df to ndarray with intensity and ast result
-for mz in range(2000, 20001):
-    # dtype = [('intensity', int), ('result', int)]
+for mz in range(2415, 2416):
     # sorted_peak = np.zeros((all_ct,), dtype=dtype)
     # sorted_peak['intensity'] = df.loc[f'pk-{mz}', :].to_numpy()
     # sorted_peak['result'] = np.concatenate((np.ones((s_ct,), dtype=int), np.zeros((r_ct,), dtype=int)), axis=None)
@@ -100,10 +100,13 @@ for mz in range(2000, 20001):
     sorted_peak = np.zeros((all_ct,), dtype=dtype)
     sorted_peak['intensity'] = df.loc[f'pk-{mz}', :].to_numpy()
     sorted_peak['result'] = np.concatenate((np.ones((len(s_id),), dtype=int), np.zeros((len(r_id),), dtype=int)), axis=None)
-    new_sorted_peak = sorted_peak[np.nonzero(sorted_peak['intensity'])]
-    new_sorted_peak = np.sort(new_sorted_peak, order='intensity')
-    s_ct = np.count_nonzero(new_sorted_peak['result'])
-    r_ct = new_sorted_peak.shape[0] - s_ct
+    sorted_peak = sorted_peak[np.nonzero(sorted_peak['intensity'])]
+    sorted_peak = np.sort(sorted_peak, order='intensity')
+    s_ct = np.count_nonzero(sorted_peak['result'])
+    r_ct = sorted_peak.shape[0] - s_ct
+    # os.chdir()
+    np.savetxt("foo.csv", sorted_peak, delimiter=",", fmt='%10.0f')
+    pdb.set_trace()
 
 # s_ct = 5
 # r_ct = 5
@@ -114,9 +117,8 @@ for mz in range(2000, 20001):
 # print(sorted_peak)
 
 # for mz in range(2000, 2011):
-    # best = naive_classifier(sorted_peak, s_ct, r_ct)
-    best = naive_classifier(new_sorted_peak, s_ct, r_ct)
-    result_df.loc[f'pk-{mz}', :] = (best['accuracy'], best['sensitivity'], best['specificity'], best['alpha'], best['orientation'])
+    best = naive_classifier(sorted_peak, s_ct, r_ct)
+    result_df.loc[f'pk-{mz}', :] = (best['accuracy'], best['sensitivity'], best['specificity'], best['alpha'], best['orientation'], best['confidence'])
     # pdb.set_trace()
     # print(mz)
 
