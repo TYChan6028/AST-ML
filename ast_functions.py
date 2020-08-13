@@ -20,26 +20,27 @@ def line_formatter(line):
     return line
 
 
-def view_ast_record(dict_list, head_only=True, lineNum=100):
-    os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
-    file = '201710-201911generated_id_ast_export.csv'
-    print("Target file is:", file)
+# def view_ast_record(dict_list, head_only=True, lineNum=100):
+#     os.chdir('/Users/ethanchan/AST-ML/ms-data/REQ ID AST list/')
+#     file = '201710-201911generated_id_ast_export.csv'
+#     print("Target file is:", file)
 
-    with open(file, 'r') as csv_file:
-        csv_reader = csv.DictReader(csv_file, delimiter=';')
-        iRow = 0
+#     with open(file, 'r') as csv_file:
+#         csv_reader = csv.DictReader(csv_file, delimiter=';')
+#         iRow = 0
 
-        for line in csv_reader:
-            # head_only parameter
-            if head_only:
-                if iRow > lineNum - 1:
-                    break
-                else:
-                    iRow += 1
-            ###
-            if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
-                line = line_formatter(line)  # clean and reformat output
-                print(line)
+#         for line in csv_reader:
+#             # head_only parameter
+#             if head_only:
+#                 if iRow > lineNum - 1:
+#                     break
+#                 else:
+#                     iRow += 1
+#             ###
+#             if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
+#             # if line['Organism Code'] == 'EKPN' and line['Drug Code'] == 'ETP':
+#                 line = line_formatter(line)  # clean and reformat output
+#                 print(line)
 
 
 def load_ast_record(head_only=True, lineNum=100):
@@ -62,7 +63,8 @@ def load_ast_record(head_only=True, lineNum=100):
                 else:
                     iRow += 1
             ###
-            if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
+            # if line['Organism Code'] == 'MAU' and line['Drug Code'] == 'OX1':
+            if line['Organism Code'] == 'EKPN' and line['Drug Code'] == 'ETP':
                 line = line_formatter(line)  # clean and reformat output
                 dict_list.append(line)
 
