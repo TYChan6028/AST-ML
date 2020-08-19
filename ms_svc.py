@@ -11,23 +11,16 @@ import ast_functions as ast
 
 def naive_classifier(sorted_peak, s_ct, r_ct):
     sample_ct = s_ct + r_ct
-    # best_sens = 0
-    # best_spec = 0
-    # best_acc = 0
-    # alpha_idx = 0
     best = {'sensitivity': 0, 'specificity': 0, 'accuracy': 0, 'alpha': 0, 'orientation': 0, 'confidence': 0}
+
     for sep_idx in range(1, sample_ct):
-        # cand_list = []
         local_best = {'sensitivity': [0, 0], 'specificity': [0, 0], 'accuracy': [0, 0]}
         # S below alpha, R above alpha
         s_real = sum(sorted_peak['result'][0:sep_idx])
         s_pred = sep_idx
         r_real = r_ct - (s_pred - s_real)
         r_pred = sample_ct - sep_idx
-        # sensitivity = round(r_real / r_pred * 100, 2)
-        # specificity = round(s_real / s_pred * 100, 2)
-        # accuracy = round((r_real + s_real) / sample_ct * 100, 2)
-        # cand_list.append((sensitivity, specificity, accuracy))
+
         local_best['sensitivity'][0] = round(r_real / r_pred * 100, 2)
         local_best['specificity'][0] = round(s_real / s_pred * 100, 2)
         local_best['accuracy'][0] = round((r_real + s_real) / sample_ct * 100, 2)
@@ -37,10 +30,7 @@ def naive_classifier(sorted_peak, s_ct, r_ct):
         r_pred = sep_idx
         s_real = s_ct - (r_pred - r_real)
         s_pred = sample_ct - sep_idx
-        # sensitivity = round(r_real / r_pred * 100, 2)
-        # specificity = round(s_real / s_pred * 100, 2)
-        # accuracy = round((r_real + s_real) / sample_ct * 100, 2)
-        # cand_list.append((sensitivity, specificity, accuracy))
+
         local_best['sensitivity'][1] = round(r_real / r_pred * 100, 2)
         local_best['specificity'][1] = round(s_real / s_pred * 100, 2)
         local_best['accuracy'][1] = round((r_real + s_real) / sample_ct * 100, 2)
@@ -62,13 +52,13 @@ def naive_classifier(sorted_peak, s_ct, r_ct):
             best['specificity'] = local_best['specificity'][o]
             best['accuracy'] = local_best['accuracy'][o]
             best['alpha'] = (sorted_peak['intensity'][sep_idx] - sorted_peak['intensity'][sep_idx - 1]) / 2
-            best['orientation'] = o
+            best['orientation'] = int(o)
             best['confidence'] = round(sample_ct / 2477 * 100)
 
         # print(sep_idx)
-        # print(sensitivity, specificity, accuracy)
-        # print(best_acc, alpha_idx)
-        # print(best)
+        # print(local_best['accuracy'][o])
+        # print(best['accuracy'], best['alpha'])
+        # print()
 
     return best
 
@@ -91,7 +81,7 @@ peaks = ['pk-' + f'{2000+i}' for i in range(0, 18001)]
 result_df = pd.DataFrame(columns=['accuracy', 'sensitivity', 'specificity', 'alpha', 'orientation', 'confidence'], index=peaks)
 
 # for each mz, convert pandas df to ndarray with intensity and ast result
-for mz in range(2415, 2416):
+for mz in range(2000, 20001):
     # sorted_peak = np.zeros((all_ct,), dtype=dtype)
     # sorted_peak['intensity'] = df.loc[f'pk-{mz}', :].to_numpy()
     # sorted_peak['result'] = np.concatenate((np.ones((s_ct,), dtype=int), np.zeros((r_ct,), dtype=int)), axis=None)
@@ -105,8 +95,8 @@ for mz in range(2415, 2416):
     s_ct = np.count_nonzero(sorted_peak['result'])
     r_ct = sorted_peak.shape[0] - s_ct
     # os.chdir()
-    np.savetxt("foo.csv", sorted_peak, delimiter=",", fmt='%10.0f')
-    pdb.set_trace()
+    # np.savetxt("foo.csv", sorted_peak, delimiter=",", fmt='%10.0f')
+    # pdb.set_trace()
 
 # s_ct = 5
 # r_ct = 5
